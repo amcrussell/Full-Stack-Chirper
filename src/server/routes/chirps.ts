@@ -5,7 +5,7 @@ import db from '../db';
 const router = Router();
 
 //GET CHIRP /api/chirps/user_{id?}
-router.get('/user_:id', async (req, res) => {
+router.get('/user/:id', async (req, res) => {
     try {
         const id = parseInt(req.params.id, 10);
         const chirp = await db.chirps.getChirpsFromUser(id);
@@ -32,7 +32,6 @@ router.get('/:id', async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         const chirp = await db.chirps.getAll();
-        console.log('meow meow!')
         res.json(chirp);
     } catch (error) {
         console.log(error);
@@ -44,7 +43,8 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         const newChirp = req.body;
-        const result = await db.chirps.createChirp(newChirp.user_id, newChirp.body, newChirp.location, 5);
+        console.log(newChirp.mentioned, '           ', newChirp.mentions)
+        const result = await db.chirps.createChirp(newChirp.user_id, newChirp.body, newChirp.location, newChirp.mentioned);
         res.json({ message: 'Chirp Created', id: result.insertId });
     } catch (error) {
         console.log(error);
@@ -52,13 +52,13 @@ router.post('/', async (req, res) => {
     }
 });
 
-//PUT CHIRP /api/chirps/edit={id}
-router.put('/edit=:id', async (req, res) => {
+//PUT CHIRP /api/chirps/edit/{id}
+router.put('/edit/:id', async (req, res) => {
     try {
         const newChirp = req.body;
         const chirpId = parseInt(req.params.id, 10);
         console.log(newChirp.id);
-        const result = await db.chirps.editChirp(chirpId, newChirp.body);
+        const result = await db.chirps.editChirp(chirpId, newChirp.body, newChirp.mentioned);
         res.json({ message: 'Chirp Edited', id: chirpId });
     } catch (error) {
         console.log(error);
@@ -66,11 +66,11 @@ router.put('/edit=:id', async (req, res) => {
     }
 })
 
-//DELETE CHIRP /api/chirps/{id?}
-router.delete('/:id', async (req, res) => {
+//DELETE CHIRP /api/chirps/delete/{id?}
+router.delete('/delete/:id', async (req, res) => {
     try {
         const id = parseInt(req.params.id, 10);
-        console.log('meow meow!')
+        console.log('meow meow! delete')
         await db.chirps.deleteChirp(id);
         res.json({ message: 'Chirp Deleted' });
     } catch (error) {

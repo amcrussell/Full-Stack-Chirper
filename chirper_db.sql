@@ -82,6 +82,16 @@ BEGIN
 	END $$
 DELIMITER $$
 
+DELIMITER $$
+DROP PROCEDURE IF EXISTS edit_chirp $$
+CREATE PROCEDURE edit_chirp(IN _chirp_id INT, IN _body VARCHAR(500), IN _mentioned INT)
+BEGIN
+	UPDATE chirps SET body = _body WHERE id = _chirp_id;
+    DELETE FROM mentions WHERE chirp_id = _chirp_id;
+	INSERT INTO mentions VALUE (_chirp_id, _mentioned);
+	END $$
+DELIMITER $$
+select * from mentions;
 
 CREATE USER 'chirper_user'@'localhost' IDENTIFIED BY 'password123';
 GRANT ALL PRIVILEGES ON chirper_db.* TO 'chirper_user'@'localhost';

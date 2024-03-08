@@ -13,7 +13,7 @@ export function getAll() {
 }
 
 export function getOne(id: number) {
-    return SelectQuery<IUsersRow>('SELECT * FROM users WHERE id=?;', [id])
+    return SelectQuery<IUsersRow>('SELECT * FROM users WHERE id=? ORDER BY id DESC;', [id])
 }
 
 export function createUser(handle: string, email: string){
