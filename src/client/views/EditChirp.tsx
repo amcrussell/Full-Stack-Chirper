@@ -4,9 +4,9 @@ import { IUser } from '../types';
 import { useNavigate } from 'react-router-dom';
 
 interface HomeProps {
-    id: number;
-    body: string;
-    hidden: boolean;
+    id?: number;
+    body?: string;
+    hidden?: boolean;
  }
 
 const Home = (props: HomeProps) => {
